@@ -10,7 +10,7 @@
 
         public decimal Temp { get; set; }
 
-        public decimal humidity { get; set; }
+        public decimal Humidity { get; set; }
         public decimal Windspeed {  get; set; }
 
         public DateTime Timestamp { get; set; }
