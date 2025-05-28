@@ -2,7 +2,7 @@
 {
     public class Garbage
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Detected { get; set; }
         public decimal Confidence_score { get; set; }
 
