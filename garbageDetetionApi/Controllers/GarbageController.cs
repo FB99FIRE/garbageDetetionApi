@@ -79,9 +79,6 @@ namespace garbageDetetionApi.Controllers
 
         // POST: api/garbage
         [HttpPost]
-        [HttpPost]
-        // POST: api/garbage
-        [HttpPost]
         public async Task<IActionResult> PostGarbage(Garbage garbage)
         {
             string apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=51.591415&lon=4.778720&appid=bff57bfeeb00032a05605c0a4d9b7d90&units=metric";
