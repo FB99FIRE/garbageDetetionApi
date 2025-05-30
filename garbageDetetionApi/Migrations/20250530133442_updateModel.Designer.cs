@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using garbageDetetionApi.Context;
 
@@ -11,9 +12,11 @@ using garbageDetetionApi.Context;
 namespace garbageDetetionApi.Migrations
 {
     [DbContext(typeof(GarbageDbContext))]
-    partial class GarbageDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250530133442_updateModel")]
+    partial class updateModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,19 +38,20 @@ namespace garbageDetetionApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Humidity")
+                    b.Property<decimal>("Humidity")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("Temp")
+                    b.Property<decimal>("Temp")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Weather")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Windspeed")
+                    b.Property<decimal>("Windspeed")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");

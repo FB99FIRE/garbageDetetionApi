@@ -1,4 +1,5 @@
-﻿using garbageDetetionApi.Context;
+﻿using System.Text.Json;
+using garbageDetetionApi.Context;
 using garbageDetetionApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -78,11 +79,35 @@ namespace garbageDetetionApi.Controllers
 
         // POST: api/garbage
         [HttpPost]
+        [HttpPost]
+        // POST: api/garbage
+        [HttpPost]
         public async Task<IActionResult> PostGarbage(Garbage garbage)
         {
+            string apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=51.591415&lon=4.778720&appid=bff57bfeeb00032a05605c0a4d9b7d90&units=metric";
+
             try
             {
-                garbage.Id = Guid.NewGuid(); // Ensure a new ID is generated
+                using var httpClient = new HttpClient();
+                var response = await httpClient.GetAsync(apiUrl);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return StatusCode((int)response.StatusCode, "Failed to retrieve weather data.");
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                var weatherResponse = JsonDocument.Parse(json).RootElement;
+
+                garbage.Id = Guid.NewGuid();
+                garbage.Detected = garbage.Detected;
+                garbage.Confidence_score = garbage.Confidence_score;
+                garbage.Weather = weatherResponse.GetProperty("weather")[0].GetProperty("main").GetString();
+                garbage.Temp = Convert.ToDecimal(weatherResponse.GetProperty("main").GetProperty("temp").GetDouble());
+                garbage.Humidity = Convert.ToDecimal(weatherResponse.GetProperty("main").GetProperty("humidity").GetInt32());
+                garbage.Windspeed = Convert.ToDecimal(weatherResponse.GetProperty("wind").GetProperty("speed").GetDouble());
+                garbage.Timestamp = DateTime.UtcNow;
+
                 context.Garbages.Add(garbage);
                 await context.SaveChangesAsync();
 
@@ -93,5 +118,7 @@ namespace garbageDetetionApi.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
     }
 }
