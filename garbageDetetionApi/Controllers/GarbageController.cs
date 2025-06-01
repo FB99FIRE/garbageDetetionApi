@@ -8,7 +8,7 @@ namespace garbageDetetionApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class GarbageController(GarbageDbContext context) : ControllerBase
+    public class GarbageController(GarbageDbContext context, IConfiguration configuration) : ControllerBase
     {
         // GET: api/garbage
         [HttpGet]
@@ -50,8 +50,34 @@ namespace garbageDetetionApi.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
         
+        //  GET: api/garbage/count/{amount}
+        [HttpGet("count/{amount}")]
+        public async Task<ActionResult<Garbage>> GetByAmount(int amount)
+        {
+            try
+            {
+                if (amount <= 0)
+                {
+                    return BadRequest("Amount must be greater than zero.");
+                }
+
+                var garbages = await context.Garbages
+                    .OrderByDescending(g => g.Timestamp)
+                    .Take(amount)
+                    .ToListAsync();
+
+                if (!garbages.Any())
+                {
+                    return NotFound($"No garbage records found for the last {amount} entries.");
+                }
+                return Ok(garbages);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
         // GET: api/garbage/{id}
         [HttpGet("{id}")]
@@ -81,8 +107,8 @@ namespace garbageDetetionApi.Controllers
         [HttpPost]
         public async Task<IActionResult> PostGarbage(Garbage garbage)
         {
-            string apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=51.591415&lon=4.778720&appid=bff57bfeeb00032a05605c0a4d9b7d90&units=metric";
-
+            string apiUrl = configuration["apiUrl"];
+            
             try
             {
                 using var httpClient = new HttpClient();
