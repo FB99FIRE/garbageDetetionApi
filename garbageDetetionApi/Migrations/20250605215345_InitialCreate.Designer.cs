@@ -12,8 +12,8 @@ using garbageDetetionApi.Context;
 namespace garbageDetetionApi.Migrations
 {
     [DbContext(typeof(GarbageDbContext))]
-    [Migration("20250530133742_updateModel2")]
-    partial class updateModel2
+    [Migration("20250605215345_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,8 +27,13 @@ namespace garbageDetetionApi.Migrations
 
             modelBuilder.Entity("garbageDetetionApi.Models.Garbage", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("CameraId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Confidence_score")
@@ -40,6 +45,12 @@ namespace garbageDetetionApi.Migrations
 
                     b.Property<decimal?>("Humidity")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Latitude")
+                        .HasColumnType("decimal(9,6)");
+
+                    b.Property<decimal>("Longitude")
+                        .HasColumnType("decimal(9,6)");
 
                     b.Property<decimal?>("Temp")
                         .HasColumnType("decimal(18,2)");
@@ -60,10 +71,13 @@ namespace garbageDetetionApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
+                            Id = 1,
+                            CameraId = new Guid("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
                             Confidence_score = 0.95m,
                             Detected = "Plastic Bottle",
                             Humidity = 45.0m,
+                            Latitude = 51.591415m,
+                            Longitude = 4.778720m,
                             Temp = 22.5m,
                             Timestamp = new DateTime(2025, 5, 15, 10, 0, 0, 0, DateTimeKind.Unspecified),
                             Weather = "Sunny",
@@ -71,10 +85,13 @@ namespace garbageDetetionApi.Migrations
                         },
                         new
                         {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
+                            Id = 2,
+                            CameraId = new Guid("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
                             Confidence_score = 0.89m,
                             Detected = "Can",
                             Humidity = 55.0m,
+                            Latitude = 51.591415m,
+                            Longitude = 4.778720m,
                             Temp = 18.3m,
                             Timestamp = new DateTime(2025, 5, 15, 11, 0, 0, 0, DateTimeKind.Unspecified),
                             Weather = "Cloudy",
@@ -82,10 +99,13 @@ namespace garbageDetetionApi.Migrations
                         },
                         new
                         {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
+                            Id = 3,
+                            CameraId = new Guid("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
                             Confidence_score = 0.92m,
                             Detected = "Paper",
                             Humidity = 80.0m,
+                            Latitude = 51.591415m,
+                            Longitude = 4.778720m,
                             Temp = 16.0m,
                             Timestamp = new DateTime(2025, 5, 15, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             Weather = "Rainy",
@@ -93,10 +113,13 @@ namespace garbageDetetionApi.Migrations
                         },
                         new
                         {
-                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
+                            Id = 4,
+                            CameraId = new Guid("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
                             Confidence_score = 0.88m,
                             Detected = "Glass",
                             Humidity = 50.0m,
+                            Latitude = 51.591415m,
+                            Longitude = 4.778720m,
                             Temp = 20.0m,
                             Timestamp = new DateTime(2025, 5, 15, 13, 0, 0, 0, DateTimeKind.Unspecified),
                             Weather = "Windy",
@@ -104,10 +127,13 @@ namespace garbageDetetionApi.Migrations
                         },
                         new
                         {
-                            Id = new Guid("55555555-5555-5555-5555-555555555555"),
+                            Id = 5,
+                            CameraId = new Guid("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
                             Confidence_score = 0.90m,
                             Detected = "Food Wrapper",
                             Humidity = 40.0m,
+                            Latitude = 51.591415m,
+                            Longitude = 4.778720m,
                             Temp = 24.0m,
                             Timestamp = new DateTime(2025, 5, 15, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             Weather = "Sunny",
