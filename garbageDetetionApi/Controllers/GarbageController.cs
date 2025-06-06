@@ -31,17 +31,17 @@ namespace garbageDetetionApi.Controllers
 
         //  GET: api/garbage/time/{timestamp}
         [HttpGet("time/{timestamp}")]
-        public async Task<ActionResult<Garbage>> GetByTimeToNow(DateTime timestamp)
+        public async Task<ActionResult<Garbage>> GetByTimeToNow(DateTime timeStamp)
         {
             try
             {
                 var garbages = await context.Garbages
-                    .Where(g => g.Timestamp >= timestamp)
+                    .Where(g => g.TimeStamp >= timeStamp)
                     .ToListAsync();
 
                 if (!garbages.Any())
                 {
-                    return NotFound($"No garbage records found after {timestamp}.");
+                    return NotFound($"No garbage records found after {timeStamp}.");
                 }
                 return Ok(garbages);
             }
@@ -63,7 +63,7 @@ namespace garbageDetetionApi.Controllers
                 }
 
                 var garbages = await context.Garbages
-                    .OrderByDescending(g => g.Timestamp)
+                    .OrderByDescending(g => g.TimeStamp)
                     .Take(amount)
                     .ToListAsync();
 
@@ -121,16 +121,17 @@ namespace garbageDetetionApi.Controllers
                 var json = await response.Content.ReadAsStringAsync();
                 var weatherResponse = JsonDocument.Parse(json).RootElement;
 
-                garbage.Detected = garbage.Detected;
-                garbage.Confidence_score = garbage.Confidence_score;
+                garbage.DetectedObject = garbage.DetectedObject;
+                garbage.ImageName = garbage.ImageName;
+                garbage.ConfidenceScore = garbage.ConfidenceScore;
                 garbage.CameraId = garbage.CameraId;
                 garbage.Longitude = garbage.Longitude;
                 garbage.Latitude = garbage.Latitude;
                 garbage.Weather = weatherResponse.GetProperty("weather")[0].GetProperty("main").GetString();
                 garbage.Temp = Convert.ToDecimal(weatherResponse.GetProperty("main").GetProperty("temp").GetDouble());
                 garbage.Humidity = Convert.ToDecimal(weatherResponse.GetProperty("main").GetProperty("humidity").GetInt32());
-                garbage.Windspeed = Convert.ToDecimal(weatherResponse.GetProperty("wind").GetProperty("speed").GetDouble());
-                garbage.Timestamp = DateTime.UtcNow;
+                garbage.WindSpeed = Convert.ToDecimal(weatherResponse.GetProperty("wind").GetProperty("speed").GetDouble());
+                garbage.TimeStamp = DateTime.UtcNow;
 
                 context.Garbages.Add(garbage);
                 await context.SaveChangesAsync();
