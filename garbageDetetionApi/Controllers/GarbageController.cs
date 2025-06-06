@@ -29,8 +29,8 @@ namespace garbageDetetionApi.Controllers
             }
         }
 
-        //  GET: api/garbage/time/{timestamp}
-        [HttpGet("time/{timestamp}")]
+        //  GET: api/garbage/time/{timeStamp}
+        [HttpGet("time/{timeStamp}")]
         public async Task<ActionResult<Garbage>> GetByTimeToNow(DateTime timeStamp)
         {
             try
