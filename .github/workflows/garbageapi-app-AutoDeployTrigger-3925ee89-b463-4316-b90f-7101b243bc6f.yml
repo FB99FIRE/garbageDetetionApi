@@ -45,4 +45,17 @@ jobs:
           _buildArgumentsKey_: |
             _buildArgumentsValues_
 
+        - name: Setup .Net Core
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: '9.x'
+
+        - name: Run EF
+          env:
+            CONN_STRING_PASSWORD: ${{ secrets.DATABASE_CONN_STRING }}
+          run: |
+            dotnet tool install --global dotnet-ef
+            dotnet tool restore
+            dotnet ef database update -p ./garbageDetetionApi/garbageDetetionApi.csproj --connection "$CONN_STRING_PASSWORD"
+
 
