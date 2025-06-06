@@ -1,24 +1,20 @@
 name: Trigger auto deployment for garbageapi-app
 
-# When this action will be executed
 on:
-  # Automatically trigger it when detected changes in repo
   push:
     branches: 
       [ master ]
     paths:
-    - '**'
-    - '.github/workflows/garbageapi-app-AutoDeployTrigger-750b02a9-3615-41b8-b88c-6f7655b1e0e0.yml'
-
-  # Allow manual trigger 
+      - '**'
+      - '.github/workflows/garbageapi-app-AutoDeployTrigger-750b02a9-3615-41b8-b88c-6f7655b1e0e0.yml'
   workflow_dispatch:      
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions: 
-      id-token: write #This is required for requesting the OIDC JWT Token
-      contents: read #Required when GH token is used to authenticate with private repo
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout to the branch
@@ -35,14 +31,18 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
           registryUrl: aispiritacr.azurecr.io
           registryUsername: ${{ secrets.GARBAGEAPIAPP_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.GARBAGEAPIAPP_REGISTRY_PASSWORD }}
           containerAppName: garbageapi-app
           resourceGroup: Student
           imageToBuild: aispiritacr.azurecr.io/garbageapi-app:${{ github.sha }}
-          _buildArgumentsKey_: |
-            _buildArgumentsValues_
 
+      - name: Run EF Core Migration
+        env:
+          CONN_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
+        run: |
+          dotnet tool install --global dotnet-ef
+          dotnet restore
+          dotnet ef database update --project garbageDetetionApi/garbageDetetionApi.csproj --connection "$CONN_STRING"
 
