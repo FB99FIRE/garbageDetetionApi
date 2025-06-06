@@ -1,0 +1,48 @@
+name: Trigger auto deployment for garbageapi-app
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ master ]
+    paths:
+    - '**'
+    - '.github/workflows/garbageapi-app-AutoDeployTrigger-750b02a9-3615-41b8-b88c-6f7655b1e0e0.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.GARBAGEAPIAPP_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.GARBAGEAPIAPP_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.GARBAGEAPIAPP_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          registryUrl: aispiritacr.azurecr.io
+          registryUsername: ${{ secrets.GARBAGEAPIAPP_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.GARBAGEAPIAPP_REGISTRY_PASSWORD }}
+          containerAppName: garbageapi-app
+          resourceGroup: Student
+          imageToBuild: aispiritacr.azurecr.io/garbageapi-app:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
+
