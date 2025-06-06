@@ -11,7 +11,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<GarbageDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration["connectionString"],
+        builder.Configuration.GetConnectionString("DefaultConnection"),
         sqlOptions => sqlOptions.EnableRetryOnFailure()
     )
 );
