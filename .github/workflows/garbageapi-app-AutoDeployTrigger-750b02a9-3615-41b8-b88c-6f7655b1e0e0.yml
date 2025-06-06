@@ -43,6 +43,11 @@ jobs:
           registryUsername: ${{ secrets.GARBAGEAPIAPP_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.GARBAGEAPIAPP_REGISTRY_PASSWORD }}
 
+      - name: Setup .NET 9 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.100-preview.3'
+
       - name: Run EF Core Migration
         env:
           CONN_STRING: ${{ secrets.DATABASE_CONNECTION_STRING }}
@@ -50,3 +55,4 @@ jobs:
           dotnet tool install --global dotnet-ef
           dotnet restore garbageDetetionApi/garbageDetetionApi.csproj
           dotnet ef database update --project garbageDetetionApi/garbageDetetionApi.csproj --connection "$CONN_STRING"
+
