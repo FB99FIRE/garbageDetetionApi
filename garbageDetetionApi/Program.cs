@@ -10,7 +10,11 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<GarbageDbContext>(options =>
-    options.UseSqlServer(builder.Configuration["connectionString"]));
+    options.UseSqlServer(
+        builder.Configuration["connectionString"],
+        sqlOptions => sqlOptions.EnableRetryOnFailure()
+    )
+);
 
 var app = builder.Build();
 
