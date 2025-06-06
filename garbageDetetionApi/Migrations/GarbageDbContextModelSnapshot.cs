@@ -33,15 +33,18 @@ namespace garbageDetetionApi.Migrations
                     b.Property<Guid>("CameraId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Confidence_score")
+                    b.Property<decimal>("ConfidenceScore")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Detected")
+                    b.Property<string>("DetectedObject")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Humidity")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Latitude")
                         .HasColumnType("decimal(9,6)");
@@ -52,13 +55,13 @@ namespace garbageDetetionApi.Migrations
                     b.Property<decimal?>("Temp")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Weather")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Windspeed")
+                    b.Property<decimal?>("WindSpeed")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -70,71 +73,76 @@ namespace garbageDetetionApi.Migrations
                         {
                             Id = 1,
                             CameraId = new Guid("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
-                            Confidence_score = 0.95m,
-                            Detected = "Plastic Bottle",
+                            ConfidenceScore = 0.95m,
+                            DetectedObject = "Plastic Bottle",
                             Humidity = 45.0m,
+                            ImageName = "plastic_bottle",
                             Latitude = 51.591415m,
                             Longitude = 4.778720m,
                             Temp = 22.5m,
-                            Timestamp = new DateTime(2025, 5, 15, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            TimeStamp = new DateTime(2025, 5, 15, 10, 0, 0, 0, DateTimeKind.Unspecified),
                             Weather = "Sunny",
-                            Windspeed = 5.2m
+                            WindSpeed = 5.2m
                         },
                         new
                         {
                             Id = 2,
                             CameraId = new Guid("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
-                            Confidence_score = 0.89m,
-                            Detected = "Can",
+                            ConfidenceScore = 0.89m,
+                            DetectedObject = "Can",
                             Humidity = 55.0m,
+                            ImageName = "can",
                             Latitude = 51.591415m,
                             Longitude = 4.778720m,
                             Temp = 18.3m,
-                            Timestamp = new DateTime(2025, 5, 15, 11, 0, 0, 0, DateTimeKind.Unspecified),
+                            TimeStamp = new DateTime(2025, 5, 15, 11, 0, 0, 0, DateTimeKind.Unspecified),
                             Weather = "Cloudy",
-                            Windspeed = 3.8m
+                            WindSpeed = 3.8m
                         },
                         new
                         {
                             Id = 3,
                             CameraId = new Guid("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
-                            Confidence_score = 0.92m,
-                            Detected = "Paper",
+                            ConfidenceScore = 0.92m,
+                            DetectedObject = "Paper",
                             Humidity = 80.0m,
+                            ImageName = "paper",
                             Latitude = 51.591415m,
                             Longitude = 4.778720m,
                             Temp = 16.0m,
-                            Timestamp = new DateTime(2025, 5, 15, 12, 0, 0, 0, DateTimeKind.Unspecified),
+                            TimeStamp = new DateTime(2025, 5, 15, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             Weather = "Rainy",
-                            Windspeed = 7.1m
+                            WindSpeed = 7.1m
                         },
                         new
                         {
                             Id = 4,
                             CameraId = new Guid("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
-                            Confidence_score = 0.88m,
-                            Detected = "Glass",
+                            ConfidenceScore = 0.88m,
+                            DetectedObject = "Glass",
                             Humidity = 50.0m,
+                            ImageName = "glass",
                             Latitude = 51.591415m,
                             Longitude = 4.778720m,
                             Temp = 20.0m,
-                            Timestamp = new DateTime(2025, 5, 15, 13, 0, 0, 0, DateTimeKind.Unspecified),
+                            TimeStamp = new DateTime(2025, 5, 15, 13, 0, 0, 0, DateTimeKind.Unspecified),
                             Weather = "Windy",
-                            Windspeed = 12.0m
+                            WindSpeed = 12.0m
                         },
                         new
                         {
                             Id = 5,
                             CameraId = new Guid("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
-                            Confidence_score = 0.90m,
-                            Detected = "Food Wrapper",
+                            ConfidenceScore = 0.90m,
+                            DetectedObject = "Food Wrapper",
                             Humidity = 40.0m,
+                            ImageName = "food_wrapper",
                             Latitude = 51.591415m,
                             Longitude = 4.778720m,
                             Temp = 24.0m,
-                            Timestamp = new DateTime(2025, 5, 15, 14, 0, 0, 0, DateTimeKind.Unspecified),
+                            TimeStamp = new DateTime(2025, 5, 15, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             Weather = "Sunny",
-                            Windspeed = 4.5m
+                            WindSpeed = 4.5m
                         });
                 });
 #pragma warning restore 612, 618
