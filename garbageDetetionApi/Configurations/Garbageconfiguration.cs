@@ -12,9 +12,12 @@ namespace LitterLinq.Configurations
             builder.HasData(
                 new Garbage
                 {
-                    Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                    Id = 1,
                     Detected = "Plastic Bottle",
                     Confidence_score = 0.95m,
+                    CameraId = Guid.Parse("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
+                    Longitude = 4.778720m,
+                    Latitude = 51.591415m,
                     Weather = "Sunny",
                     Temp = 22.5m,
                     Humidity = 45.0m,
@@ -23,9 +26,12 @@ namespace LitterLinq.Configurations
                 },
                 new Garbage
                 {
-                    Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                    Id = 2,
                     Detected = "Can",
                     Confidence_score = 0.89m,
+                    CameraId = Guid.Parse("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
+                    Longitude = 4.778720m,
+                    Latitude = 51.591415m,
                     Weather = "Cloudy",
                     Temp = 18.3m,
                     Humidity = 55.0m,
@@ -34,9 +40,12 @@ namespace LitterLinq.Configurations
                 },
                 new Garbage
                 {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                    Id = 3,
                     Detected = "Paper",
                     Confidence_score = 0.92m,
+                    CameraId = Guid.Parse("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
+                    Longitude = 4.778720m,
+                    Latitude = 51.591415m,
                     Weather = "Rainy",
                     Temp = 16.0m,
                     Humidity = 80.0m,
@@ -45,9 +54,12 @@ namespace LitterLinq.Configurations
                 },
                 new Garbage
                 {
-                    Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
+                    Id = 4,
                     Detected = "Glass",
                     Confidence_score = 0.88m,
+                    CameraId = Guid.Parse("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
+                    Longitude = 4.778720m,
+                    Latitude = 51.591415m,
                     Weather = "Windy",
                     Temp = 20.0m,
                     Humidity = 50.0m,
@@ -56,9 +68,12 @@ namespace LitterLinq.Configurations
                 },
                 new Garbage
                 {
-                    Id = Guid.Parse("55555555-5555-5555-5555-555555555555"),
+                    Id = 5,
                     Detected = "Food Wrapper",
                     Confidence_score = 0.90m,
+                    CameraId = Guid.Parse("d3c1f8b2-4e5f-4a2b-9c3e-8f1b2c3d4e5f"),
+                    Longitude = 4.778720m,
+                    Latitude = 51.591415m,
                     Weather = "Sunny",
                     Temp = 24.0m,
                     Humidity = 40.0m,

@@ -81,21 +81,20 @@ namespace garbageDetetionApi.Controllers
 
         // GET: api/garbage/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Garbage>> GetById(string id)
+        public async Task<ActionResult<Garbage>> GetById(int id)
         {
             try
             {
-                if (!Guid.TryParse(id, out var garbageId))
-                {
-                    return BadRequest("Invalid ID format.");
-                }
+                var garbages = await context.Garbages
+                    .Where(g => g.Id >= id)
+                    .OrderBy(g => g.Id)
+                    .ToListAsync();
 
-                var garbage = await context.Garbages.FindAsync(garbageId);
-                if (garbage == null)
+                if (!garbages.Any())
                 {
-                    return NotFound($"Garbage record with ID {id} not found.");
+                    return NotFound($"No garbage records found with Id >= {id}.");
                 }
-                return Ok(garbage);
+                return Ok(garbages);
             }
             catch (Exception ex)
             {
@@ -122,9 +121,11 @@ namespace garbageDetetionApi.Controllers
                 var json = await response.Content.ReadAsStringAsync();
                 var weatherResponse = JsonDocument.Parse(json).RootElement;
 
-                garbage.Id = Guid.NewGuid();
                 garbage.Detected = garbage.Detected;
                 garbage.Confidence_score = garbage.Confidence_score;
+                garbage.CameraId = garbage.CameraId;
+                garbage.Longitude = garbage.Longitude;
+                garbage.Latitude = garbage.Latitude;
                 garbage.Weather = weatherResponse.GetProperty("weather")[0].GetProperty("main").GetString();
                 garbage.Temp = Convert.ToDecimal(weatherResponse.GetProperty("main").GetProperty("temp").GetDouble());
                 garbage.Humidity = Convert.ToDecimal(weatherResponse.GetProperty("main").GetProperty("humidity").GetInt32());
