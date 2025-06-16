@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LitterLinq.Configurations
 {
-    public class LitterConfiguration : IEntityTypeConfiguration<Garbage>
+    public class GarbageConfiguration : IEntityTypeConfiguration<Garbage>
     {
         public void Configure(EntityTypeBuilder<Garbage> builder)
         {
