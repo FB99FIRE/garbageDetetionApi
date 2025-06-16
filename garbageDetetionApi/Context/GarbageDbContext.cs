@@ -12,6 +12,6 @@ public class GarbageDbContext(DbContextOptions<GarbageDbContext> options) : DbCo
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        builder.ApplyConfiguration(new LitterConfiguration());
+        builder.ApplyConfiguration(new GarbageConfiguration());
     }
 }
