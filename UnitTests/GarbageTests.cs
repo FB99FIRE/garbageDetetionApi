@@ -1,6 +1,7 @@
 ﻿using garbageDetetionApi.Context;
 using garbageDetetionApi.Controllers;
 using garbageDetetionApi.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,12 +11,21 @@ namespace UnitTests;
 
 public class GarbageControllerTests
 {
+    private Guid readApiKey = Guid.NewGuid();
+    private Guid writeApiKey = Guid.NewGuid();
+        
     private GarbageDbContext GetEmptyDbContext()
     {
         var options = new DbContextOptionsBuilder<GarbageDbContext>()
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
-        return new GarbageDbContext(options);
+        var context = new GarbageDbContext(options);
+        context.ApiKeys.AddRange(
+            new ApiKey { Id = readApiKey, Type = "read" },
+            new ApiKey { Id = writeApiKey, Type = "write" }
+        );
+        context.SaveChanges();
+        return context;
     }
 
     private GarbageDbContext GetDbContextWithData()
@@ -35,10 +45,33 @@ public class GarbageControllerTests
         var context = GetEmptyDbContext();
         var configMock = new Mock<IConfiguration>();
         var controller = new GarbageController(context, configMock.Object);
+        
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+        controller.ControllerContext.HttpContext.Request.Headers["x-api-key"] = readApiKey.ToString();
 
         var result = await controller.GetAll();
 
         Assert.That(result.Result, Is.TypeOf<NotFoundObjectResult>());
+    }
+
+    [Test]
+    public async Task GetAll_ReturnsUnauthorized_WhenNoApiKey()
+    {
+        var context = GetEmptyDbContext();
+        var configMock = new Mock<IConfiguration>();
+        var controller = new GarbageController(context, configMock.Object);
+        
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+        
+        var result = await controller.GetAll();
+        
+        Assert.That(result.Result, Is.TypeOf<UnauthorizedObjectResult>());
     }
 
     [Test]
@@ -47,6 +80,12 @@ public class GarbageControllerTests
         var context = GetDbContextWithData();
         var configMock = new Mock<IConfiguration>();
         var controller = new GarbageController(context, configMock.Object);
+        
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+        controller.ControllerContext.HttpContext.Request.Headers["x-api-key"] = readApiKey.ToString();
 
         var time = DateTime.UtcNow.AddMinutes(-15);
         var result = await controller.GetByTimeToNow(time);
@@ -62,6 +101,12 @@ public class GarbageControllerTests
         var context = GetDbContextWithData();
         var configMock = new Mock<IConfiguration>();
         var controller = new GarbageController(context, configMock.Object);
+        
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+        controller.ControllerContext.HttpContext.Request.Headers["x-api-key"] = readApiKey.ToString();
 
         var time = DateTime.UtcNow.AddHours(1);
         var result = await controller.GetByTimeToNow(time);
@@ -75,6 +120,12 @@ public class GarbageControllerTests
         var context = GetDbContextWithData();
         var configMock = new Mock<IConfiguration>();
         var controller = new GarbageController(context, configMock.Object);
+        
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+        controller.ControllerContext.HttpContext.Request.Headers["x-api-key"] = readApiKey.ToString();
 
         var result = await controller.GetByAmount(0);
 
@@ -87,6 +138,12 @@ public class GarbageControllerTests
         var context = GetDbContextWithData();
         var configMock = new Mock<IConfiguration>();
         var controller = new GarbageController(context, configMock.Object);
+        
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+        controller.ControllerContext.HttpContext.Request.Headers["x-api-key"] = readApiKey.ToString();
 
         var result = await controller.GetByAmount(1);
 
@@ -101,6 +158,12 @@ public class GarbageControllerTests
         var context = GetDbContextWithData();
         var configMock = new Mock<IConfiguration>();
         var controller = new GarbageController(context, configMock.Object);
+        
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+        controller.ControllerContext.HttpContext.Request.Headers["x-api-key"] = readApiKey.ToString();
 
         var result = await controller.GetById(1);
 
@@ -115,6 +178,12 @@ public class GarbageControllerTests
         var context = GetDbContextWithData();
         var configMock = new Mock<IConfiguration>();
         var controller = new GarbageController(context, configMock.Object);
+        
+        controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+        controller.ControllerContext.HttpContext.Request.Headers["x-api-key"] = readApiKey.ToString();
 
         var result = await controller.GetById(99);
 
