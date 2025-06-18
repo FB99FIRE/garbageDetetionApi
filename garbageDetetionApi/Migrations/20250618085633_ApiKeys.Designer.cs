@@ -12,8 +12,8 @@ using garbageDetetionApi.Context;
 namespace garbageDetetionApi.Migrations
 {
     [DbContext(typeof(GarbageDbContext))]
-    [Migration("20250618080517_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250618085633_ApiKeys")]
+    partial class ApiKeys
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
