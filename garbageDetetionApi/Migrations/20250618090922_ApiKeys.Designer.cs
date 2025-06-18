@@ -12,7 +12,7 @@ using garbageDetetionApi.Context;
 namespace garbageDetetionApi.Migrations
 {
     [DbContext(typeof(GarbageDbContext))]
-    [Migration("20250618085633_ApiKeys")]
+    [Migration("20250618090922_ApiKeys")]
     partial class ApiKeys
     {
         /// <inheritdoc />
