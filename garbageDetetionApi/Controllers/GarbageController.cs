@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using garbageDetetionApi.Context;
-using garbageDetetionApi.Helper;
 using garbageDetetionApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,13 +14,6 @@ namespace garbageDetetionApi.Controllers
         [HttpGet]
         public async Task<ActionResult<Garbage>> GetAll()
         {
-            // Check if the API key is valid
-            var apiKey = Request.Headers["x-api-key"].ToString();
-            if (ApiKeyHelper.CheckApiKeyType(apiKey, context) != ApiKeyType.Read)
-            {
-                return Unauthorized("Invalid API key or insufficient permissions.");
-            }
-            
             try
             {
                 var garbages = await context.Garbages.ToListAsync();
@@ -41,13 +33,6 @@ namespace garbageDetetionApi.Controllers
         [HttpGet("time/{timeStamp}")]
         public async Task<ActionResult<Garbage>> GetByTimeToNow(DateTime timeStamp)
         {
-            // Check if the API key is valid
-            var apiKey = Request.Headers["x-api-key"].ToString();
-            if (ApiKeyHelper.CheckApiKeyType(apiKey, context) != ApiKeyType.Read)
-            {
-                return Unauthorized("Invalid API key or insufficient permissions.");
-            }
-            
             try
             {
                 var garbages = await context.Garbages
@@ -70,13 +55,6 @@ namespace garbageDetetionApi.Controllers
         [HttpGet("count/{amount}")]
         public async Task<ActionResult<Garbage>> GetByAmount(int amount)
         {
-            // Check if the API key is valid
-            var apiKey = Request.Headers["x-api-key"].ToString();
-            if (ApiKeyHelper.CheckApiKeyType(apiKey, context) != ApiKeyType.Read)
-            {
-                return Unauthorized("Invalid API key or insufficient permissions.");
-            }
-            
             try
             {
                 if (amount <= 0)
@@ -105,13 +83,6 @@ namespace garbageDetetionApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Garbage>> GetById(int id)
         {
-            // Check if the API key is valid
-            var apiKey = Request.Headers["x-api-key"].ToString();
-            if (ApiKeyHelper.CheckApiKeyType(apiKey, context) != ApiKeyType.Read)
-            {
-                return Unauthorized("Invalid API key or insufficient permissions.");
-            }
-            
             try
             {
                 var garbages = await context.Garbages
@@ -135,13 +106,6 @@ namespace garbageDetetionApi.Controllers
         [HttpPost]
         public async Task<IActionResult> PostGarbage(Garbage garbage)
         {
-            // Check if the API key is valid
-            var apiKey = Request.Headers["x-api-key"].ToString();
-            if (ApiKeyHelper.CheckApiKeyType(apiKey, context) != ApiKeyType.Write)
-            {
-                return Unauthorized("Invalid API key or insufficient permissions.");
-            }
-            
             string apiUrl = configuration["apiUrl"];
             
             try
@@ -179,5 +143,7 @@ namespace garbageDetetionApi.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+
     }
 }

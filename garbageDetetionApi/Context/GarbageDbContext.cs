@@ -8,7 +8,6 @@ public class GarbageDbContext(DbContextOptions<GarbageDbContext> options) : DbCo
 {
 
     public DbSet<Garbage> Garbages { get; set; }
-    public DbSet<ApiKey> ApiKeys { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
