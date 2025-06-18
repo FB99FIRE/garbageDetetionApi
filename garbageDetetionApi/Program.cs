@@ -11,8 +11,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<GarbageDbContext>(options =>
     options.UseSqlServer(
-        // builder.Configuration.GetConnectionString("DefaultConnection"),
-        "Server=localhost,1433;Database=ICT14;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;",
+        builder.Configuration.GetConnectionString("DefaultConnection"),
         sqlOptions => sqlOptions.EnableRetryOnFailure()
     )
 );
