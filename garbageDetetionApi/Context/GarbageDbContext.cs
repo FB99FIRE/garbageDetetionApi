@@ -3,7 +3,7 @@ using LitterLinq.Configurations;
 using Microsoft.EntityFrameworkCore;
 
 namespace garbageDetetionApi.Context;
-
+ 
 public class GarbageDbContext(DbContextOptions<GarbageDbContext> options) : DbContext(options)
 {
 
