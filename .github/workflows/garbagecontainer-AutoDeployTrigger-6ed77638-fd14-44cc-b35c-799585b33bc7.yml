@@ -31,12 +31,20 @@ jobs:
           tenant-id: ${{ secrets.GARBAGECONTAINER_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.GARBAGECONTAINER_AZURE_SUBSCRIPTION_ID }}
 
+      - name: Run unit tests
+        run: |
+          dotnet test ./UnitTests/UnitTests.csproj --no-build --verbosity normal
+          
+      - name: Setup .Net Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+      
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}garbageDetetionApi
           _dockerfilePathKey_: _dockerfilePath_
-          _targetLabelKey_: _targetLabel_
           registryUrl: garbageregistry.azurecr.io
           registryUsername: ${{ secrets.GARBAGECONTAINER_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.GARBAGECONTAINER_REGISTRY_PASSWORD }}
@@ -45,5 +53,14 @@ jobs:
           imageToBuild: garbageregistry.azurecr.io/garbagecontainer:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
+            
+      - name: Run EF
+        env:
+          DATABASE_CONN_STRING: ${{ secrets.DATABASE_CONN_STRING }}
+        run: |
+          dotnet tool install --global dotnet-ef
+          dotnet tool restore
+          dotnet ef database update -p ./garbageDetetionApi/garbageDetetionApi.csproj --connection "$DATABASE_CONN_STRING"
+
 
 
