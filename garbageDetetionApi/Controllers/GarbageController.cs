@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Xml.Linq;
 using garbageDetetionApi.Context;
 using garbageDetetionApi.Helper;
 using garbageDetetionApi.Models;
@@ -168,6 +169,74 @@ namespace garbageDetetionApi.Controllers
                 garbage.Humidity = Convert.ToDecimal(weatherResponse.GetProperty("main").GetProperty("humidity").GetInt32());
                 garbage.WindSpeed = Convert.ToDecimal(weatherResponse.GetProperty("wind").GetProperty("speed").GetDouble());
                 garbage.TimeStamp = DateTime.UtcNow;
+
+                context.Garbages.Add(garbage);
+                await context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetById), new { id = garbage.Id }, garbage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        // POST: api/garbage/no2
+        [HttpPost("no2")]
+        public async Task<IActionResult> PostGarbageWithNO2(Garbage garbage)
+        {
+            // Check if the API key is valid
+            var apiKey = Request.Headers["x-api-key"].ToString();
+            if (ApiKeyHelper.CheckApiKeyType(apiKey, context) != ApiKeyType.Write)
+            {
+                return Unauthorized("Invalid API key or insufficient permissions.");
+            }
+
+            string apiUrl = configuration["apiUrl"];
+            string no2ApiUrl = configuration["no2ApiUrl"];
+            try
+            {
+                using var httpClient = new HttpClient();
+                var response = await httpClient.GetAsync(apiUrl);
+                var responseNo2 = await httpClient.GetAsync(no2ApiUrl);
+                if (!response.IsSuccessStatusCode)
+                {
+                    return StatusCode((int)response.StatusCode, "Failed to retrieve weather data.");
+                }
+                if (!responseNo2.IsSuccessStatusCode)
+                {
+                    return StatusCode((int)responseNo2.StatusCode, "Failed to retrieve NO2 data.");
+  
+                }
+
+                var json = await response.Content.ReadAsStringAsync();
+                var weatherResponse = JsonDocument.Parse(json).RootElement;
+
+                garbage.DetectedObject = garbage.DetectedObject;
+                garbage.ImageName = garbage.ImageName;
+                garbage.ConfidenceScore = garbage.ConfidenceScore;
+                garbage.CameraId = garbage.CameraId;
+                garbage.Longitude = garbage.Longitude;
+                garbage.Latitude = garbage.Latitude;
+                garbage.Weather = weatherResponse.GetProperty("weather")[0].GetProperty("main").GetString();
+                garbage.Temp = Convert.ToDecimal(weatherResponse.GetProperty("main").GetProperty("temp").GetDouble());
+                garbage.Humidity = Convert.ToDecimal(weatherResponse.GetProperty("main").GetProperty("humidity").GetInt32());
+                garbage.WindSpeed = Convert.ToDecimal(weatherResponse.GetProperty("wind").GetProperty("speed").GetDouble());
+                garbage.TimeStamp = DateTime.UtcNow;
+
+                var no2Json = await responseNo2.Content.ReadAsStringAsync();
+                var no2Response = JsonDocument.Parse(no2Json).RootElement;
+                var dataArray = no2Response.GetProperty("data").EnumerateArray();
+                decimal? no2Value = null;
+                foreach (var item in dataArray)
+                {
+                    if (item.GetProperty("formula").GetString() == "NO2") 
+                    {
+                        no2Value = Convert.ToDecimal(item.GetProperty("value").GetDouble());
+                        break;
+                    }
+                }
+                garbage.NO2 = no2Value;
 
                 context.Garbages.Add(garbage);
                 await context.SaveChangesAsync();
