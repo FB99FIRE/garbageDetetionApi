@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace garbageDetetionApi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class AddaNO2ToGarbage : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,7 +41,8 @@ namespace garbageDetetionApi.Migrations
                     Temp = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Humidity = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     WindSpeed = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NO2 = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {

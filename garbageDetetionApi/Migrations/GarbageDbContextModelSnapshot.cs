@@ -79,6 +79,9 @@ namespace garbageDetetionApi.Migrations
                     b.Property<decimal>("Longitude")
                         .HasColumnType("decimal(9,6)");
 
+                    b.Property<decimal?>("NO2")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal?>("Temp")
                         .HasColumnType("decimal(18,2)");
 

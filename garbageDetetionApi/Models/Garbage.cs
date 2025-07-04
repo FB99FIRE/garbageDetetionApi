@@ -35,5 +35,8 @@ namespace garbageDetetionApi.Models
         public decimal? Humidity { get; set; }
         public decimal? WindSpeed { get; set; }
         public DateTime TimeStamp { get; set; }
+
+        public decimal? NO2 { get; set; }
+
     }
 }
